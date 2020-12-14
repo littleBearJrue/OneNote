@@ -119,7 +119,7 @@
 
     - 4）清理(Sweeping, 并发)
 
-13.  当且仅当动态值和动态类型都为 nil 时，接口类型值才为 nil
+13. 当且仅当动态值和动态类型都为 nil 时，接口类型值才为 nil
 
 14. go 中不同类型是不能比较的，而数组长度是数组类型的一部分，所以 […]int{1} 和 [2]int{1} 是两种不同的类型，不能比较；片是不能比较的
 
@@ -153,6 +153,75 @@
 23. rune 是 int32 的别名一样，byte 是 uint8 的别名，别名类型无序转换，可直接转换。
 
 
+24. func函数只能与nil比较
+
+25. struct是不可寻址的，无法直接赋值(直接返回的 T{} 不可寻址)
+
+    ```go
+    type T struct {
+        n int
+    }
+    func main() {
+        m := make(map[int]T)
+        t := T{1}
+        m[0] = t
+        fmt.Println(m[0].n)
+    }
+    ```
+
+26. 方法表达式???
+
+    ```go
+    func main() {
+    	var s = S{}
+     	s.n = 10
+     	s.test()
+    
+     	s.n++
+     	f1 := S.test
+     	f1(s)
+    
+    	s.n++
+     	f2 := (*S).test
+     	f2(&s)
+    }
+    
+    type N int
+    
+    func (n N) test(){
+    	fmt.Println(n)
+    }
+    
+    type S struct {
+    	n int
+    }
+    
+    func (s S) test() {
+    	fmt.Println(s.n)
+    }
+    ```
+
+27. 指针值赋值给变量或者作为函数参数传递时，会立即计算并复制该方法执行所需的接收者对象，与其绑定，以便在稍后执行时，能隐式第传入接收者参数
+
+28. recover() 必须在 defer() 函数中直接调用才有效
+
+    ```go
+    func main() {
+      defer func() {
+          recover()
+      }()
+      panic(1)
+    }
+    ```
+
+29. 当程序 panic 时就不会往下执行，可以使用 recover() 捕获 panic 的内容
+
+30. cap() 函数的作用：
+
+    - arry 返回数组的元素个数；
+    - slice 返回 slice 的最大容量；
+    - channel 返回 channel 的容量；
 
 
- 
+
+
