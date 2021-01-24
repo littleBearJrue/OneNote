@@ -222,6 +222,69 @@
     - slice 返回 slice 的最大容量；
     - channel 返回 channel 的容量；
 
+31. 有名类型
+
+    - 内置类型，比如 int, int64, float, string, bool 等；
+
+    - 使用关键字 type 声明的类型；
+
+      有名类型不能相互赋值；
+
+      无名类型是基于已有的有名类型的组合一起的类型，如：struct{} []string
+
+      无名类型不能作为方法的接收者
+
+32. 用切片复制的方式实现值大小的比较
+
+    ```go
+    func min(a int, b uint) {
+        var min = 0
+        min = copy(make([]struct{},a),make([]struct{},b))
+        fmt.Printf("The min of %d and %d is %d\n", a, b, min)
+    }
+    ```
+
+33. 100天读写锁问题？？？
+
+34. return语句不是原子操作，它可以拆分成两部分
+
+    * 返回值赋值
+    * return
+
+    ```go
+    func main() {
+        fmt.Println(doubleScore(0))    
+        fmt.Println(doubleScore(20.0)) 
+        fmt.Println(doubleScore(50.0)) 
+    }
+    func doubleScore(source float32) (score float32) {
+        defer func() {
+            if score < 1 || score >= 100 {
+                score = source
+            }
+        }()
+        return source * 2
+    }
+    ```
+
+35. 当写锁阻塞时，新的读锁是无法申请的（有效防止写锁饥饿），导致死锁
+
+36. 读写锁：
+
+    *  RWMutex 在读锁占用的情况下，会阻止写，但不阻止读；
+    * RWMutex 在写锁占用情况下，会阻止任何其他 goroutine（无论读和写）进来，整个锁相当于由该 goroutine 独占；
+
+37. 加锁后复制变量，会将锁的状态也复制
+
+    ```go
+        var mu MyMutex
+        mu.Lock()
+        var mu1 = mu
+    ```
+
+38. 
+
+
 
 
 
